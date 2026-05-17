@@ -1,4 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using TaskManager.Api.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+//pega a connection string
+var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+//Registra o DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(ConnectionString)
+);
+
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,6 +49,9 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
+
+//mapeia todas as controllers
+app.MapControllers();
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
